@@ -116,8 +116,14 @@ images. However, this method does not give satisfactory
 results for audio style transfer. CNN’s are not suited for
 capturing long term dependencies as in case of audio files.
 
+One challenge posed in the comparison between visual images and spectrograms is the fact that visual objects and sound events do not accumulate in the same manner. To use a visual analogy, one could say that sounds are always “transparent” whereas most visual objects are opaque.
+
+When encountering a pixel of a certain color in an image, it can most often be assumed to belong to a single object. Discrete sound events do not separate into layers on a spectrogram: Instead, they all sum together into a distinct whole. That means that a particular observed frequency in a spectrogram cannot be assumed to belong to a single sound as the magnitude of that frequency could have been produced by any number of accumulated sounds or even by the complex interactions between sound waves such as phase cancellation. This makes it difficult to separate simultaneous sounds in spectrogram representations.
+
+In images, similar neighboring pixels can often be assumed to belong to the same visual object but in sound, frequencies are most often non-locally distributed on the spectrogram. Periodic sounds are typically comprised of a fundamental frequency and a number of harmonics which are spaced apart by relationships dictated by the source of the sound. It is the mixture of these harmonics that determines the timbre of the sound.
+
 \subsection{Dataset}
-For pre-training networks we will use dataset containing audio clips in .wav format. The dataset  contains 3-seconds music recording labelled by predominant class.
+For pre-training networks we will use dataset containing audio clips in .wav format. The dataset  contains 3-seconds music recording labelled by predominant class. We used a dataset downloaded from https://datahack.analyticsvidhya.com/contest/practice-problem-urban-sound-classification/ and used this dataset to train our deep model on audio spectrograms giving it the task of audio classification.
 
 \subsection{Proposed Method}
 Our proposed method will focus on improving the existing method for audio
@@ -209,21 +215,20 @@ Since the above method of extracting features from style and content audio didn'
 \begin{figure*}
 \begin{center}
 \fbox{
-\includegraphics[scale=0.6]{result_base.png}
-\includegraphics[scale=0.6]{shallow.png}
-\includegraphics[scale=0.6]{trained.png}
+\includegraphics[scale=1.0]{all_results.png}
 }
 \end{center}
-   \caption{Trained Model Results of base, shallow and trained models respectively}
+   \caption{Trained Model Results of trained, shallow and base models respectively}
 \label{fig:short}
 \end{figure*}
 
 \subsection{Base Model}
 We implemented the base model following the archtiecure proposed by Leon Gatys and Matthias Bethgev \cite{Authors00001}. The results are as shown in the Figure 5.
+As seen from the audio spectrogram of the target audio, the resultant target audio shows little resemblance of content and style audio and is filled with noise. The model fails to learn features os content and style hence unable to produce a good representation of style and content audio.
 
 
 \subsection{Shallow Model}
-The results of the base model was not satifactory. We tried a shalllow CNN to extract style and content features and then used the style transfer algorithm to iteratvely update the target audio. The target audio spectrogram is as shown in the Figure 5 which has some improvement over the base model.
+The results of the base model were not satisfactory. We tried a shallow CNN to extract style and content features and then used the style transfer algorithm to iteratively update the target audio. The target audio spectrogram is as shown in the Figure 5 which has some improvement over the base model.
 
 
 \subsection{Deep Model with pretrained network}
